@@ -12,24 +12,16 @@ import {
   useCompanyStore,
   useShareholders,
   PersonType,
-  ShareholderSelection,
+  // ShareholderSelection, // unused while nominee is disabled
 } from "../../../store/useCompanyStore";
+import { countryData } from "../../../lib/countryUtils";
 
-const nationalityOptions: SelectOption[] = [
-  { value: "hong-kong", label: "Hong Kong" },
-  { value: "singapore", label: "Singapore" },
-  { value: "usa", label: "United States" },
-  { value: "uk", label: "United Kingdom" },
-  { value: "uae", label: "United Arab Emirates" },
-];
+const allCountryOptions: SelectOption[] = Object.values(countryData)
+  .sort((a, b) => a.name.localeCompare(b.name))
+  .map((c) => ({ value: c.code, label: c.name }));
 
-const countryOfIncorporationOptions: SelectOption[] = [
-  { value: "hong-kong", label: "Hong Kong" },
-  { value: "singapore", label: "Singapore" },
-  { value: "usa", label: "United States" },
-  { value: "uk", label: "United Kingdom" },
-  { value: "uae", label: "United Arab Emirates" },
-];
+const nationalityOptions = allCountryOptions;
+const countryOfIncorporationOptions = allCountryOptions;
 
 const shareholderTypeOptions = [
   { value: "individual", label: "Individual" },
@@ -65,14 +57,14 @@ export const Step3Shareholders: React.FC = () => {
     Record<string, string>
   >({});
 
-  const hasNomineeAt100 = shareholders.some(
-    (s) =>
-      (s.isNominee || s.shareholderSelection === "nominee") &&
-      (s.shareholding?.percentage || 0) === 100,
-  );
+  // const hasNomineeAt100 = shareholders.some(
+  //   (s) =>
+  //     (s.isNominee || s.shareholderSelection === "nominee") &&
+  //     (s.shareholding?.percentage || 0) === 100,
+  // );
+  const hasNomineeAt100 = false;
 
   const handleAddShareholder = () => {
-    if (hasNomineeAt100) return;
     addShareholder("", 0, 0);
   };
 
@@ -80,48 +72,48 @@ export const Step3Shareholders: React.FC = () => {
     removeShareholder(id);
   };
 
-  const handleSelectionChange = (
-    id: string,
-    value: ShareholderSelection,
-    currentName: string,
-  ) => {
-    if (value === "nominee") {
-      updatePerson(id, {
-        shareholderSelection: "nominee",
-        isNominee: true,
-        type: "individual",
-        fullName: "Nominee",
-        companyName: "",
-        countryOfIncorporation: null,
-        registrationNumber: null,
-        nationality: "",
-        email: "",
-        phone: "",
-        residentialAddress: {
-          street: "",
-          city: "",
-          state: "",
-          postalCode: "",
-          country: "",
-        },
-        documents: {
-          passport: null,
-          selfie: null,
-          addressProof: null,
-          certificate_of_incorporation: null,
-          business_license: null,
-          others: null,
-        },
-      });
-      return;
-    }
-
-    updatePerson(id, {
-      shareholderSelection: "own_name",
-      isNominee: false,
-      fullName: currentName === "Nominee Shareholder" ? "" : currentName,
-    });
-  };
+  // Nominee selection disabled — only "own_name" is supported
+  // const handleSelectionChange = (
+  //   id: string,
+  //   value: ShareholderSelection,
+  //   currentName: string,
+  // ) => {
+  //   if (value === "nominee") {
+  //     updatePerson(id, {
+  //       shareholderSelection: "nominee",
+  //       isNominee: true,
+  //       type: "individual",
+  //       fullName: "Nominee",
+  //       companyName: "",
+  //       countryOfIncorporation: null,
+  //       registrationNumber: null,
+  //       nationality: "",
+  //       email: "",
+  //       phone: "",
+  //       residentialAddress: {
+  //         street: "",
+  //         city: "",
+  //         state: "",
+  //         postalCode: "",
+  //         country: "",
+  //       },
+  //       documents: {
+  //         passport: null,
+  //         selfie: null,
+  //         addressProof: null,
+  //         certificate_of_incorporation: null,
+  //         business_license: null,
+  //         others: null,
+  //       },
+  //     });
+  //     return;
+  //   }
+  //   updatePerson(id, {
+  //     shareholderSelection: "own_name",
+  //     isNominee: false,
+  //     fullName: currentName === "Nominee Shareholder" ? "" : currentName,
+  //   });
+  // };
 
   const handleSharePercentageChange = (id: string, inputValue: string) => {
     const cleanedValue = inputValue.replace(/[^0-9.]/g, "");
@@ -253,24 +245,23 @@ export const Step3Shareholders: React.FC = () => {
             Add and complete details for each shareholder
           </p>
         </div>
-        {!hasNomineeAt100 && (
-          <Button
-            type="button"
-            onClick={handleAddShareholder}
-            variant="outline"
-            className="h-10 px-4 border-gray-300 hover:border-[#212833] hover:bg-white"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Shareholder
-          </Button>
-        )}
+        <Button
+          type="button"
+          onClick={handleAddShareholder}
+          variant="outline"
+          className="h-10 px-4 border-gray-300 hover:border-[#212833] hover:bg-white"
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Add Shareholder
+        </Button>
       </div>
 
-      {hasNomineeAt100 && (
+      {/* Nominee lock notice hidden — nominee disabled */}
+      {/* {hasNomineeAt100 && (
         <p className="text-xs text-blue-700 bg-blue-50 border border-blue-200 rounded-md px-3 py-2">
           Nominee is set to 100%. Additional shareholders are disabled.
         </p>
-      )}
+      )} */}
 
       {errors?.shareholders && (
         <p className="text-xs text-red-500 bg-red-50 border border-red-200 rounded-md px-3 py-2">
@@ -299,9 +290,9 @@ export const Step3Shareholders: React.FC = () => {
       ) : (
         <div className="space-y-6">
           {shareholders.map((shareholder, index) => {
-            const isNominee =
-              shareholder.isNominee ||
-              shareholder.shareholderSelection === "nominee";
+            // const isNominee =
+            //   shareholder.isNominee ||
+            //   shareholder.shareholderSelection === "nominee";
 
             return (
               <div
@@ -325,7 +316,8 @@ export const Step3Shareholders: React.FC = () => {
                   </Button>
                 </div>
 
-                <div className="space-y-2 mb-6">
+                {/* Nominee toggle removed — only Own Name is supported */}
+                {/* <div className="space-y-2 mb-6">
                   <label className="block text-sm font-medium text-[#212833]">
                     Shareholder Selection <span className="text-red-500">*</span>
                   </label>
@@ -338,7 +330,6 @@ export const Step3Shareholders: React.FC = () => {
                         const isActive =
                           (shareholder.shareholderSelection || "own_name") ===
                           option.value;
-
                         return (
                           <button
                             key={option.value}
@@ -363,6 +354,11 @@ export const Step3Shareholders: React.FC = () => {
                       })}
                     </div>
                   </div>
+                </div> */}
+                <div className="mb-6">
+                  <span className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#6896ff] to-[#004eff] text-white text-sm font-semibold">
+                    Own Name
+                  </span>
                 </div>
 
                 <div className="space-y-2 mb-6">
@@ -394,7 +390,8 @@ export const Step3Shareholders: React.FC = () => {
                   )}
                 </div>
 
-                {isNominee ? (
+                {/* Nominee panel hidden — always show own name form */}
+                {/* {isNominee ? (
                   <div className="space-y-2 mb-2">
                     <label className="block text-sm font-medium text-[#212833]">
                       Nominee Shareholder
@@ -403,7 +400,8 @@ export const Step3Shareholders: React.FC = () => {
                       Nominee is selected. Personal/corporate details are hidden.
                     </p>
                   </div>
-                ) : (
+                ) : ( */}
+                {true ? (
                   <>
                     <div className="space-y-2 mb-6">
                       <label className="block text-sm font-medium text-[#212833]">
@@ -501,7 +499,7 @@ export const Step3Shareholders: React.FC = () => {
                               Certificate of Incorporation{" "}
                               <span className="text-red-500">*</span>
                             </label>
-                            <label className="flex flex-col items-center justify-center gap-2 py-4 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                            <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
                               <Upload className="w-5 h-5 text-gray-400" />
                               <span
                                 className="block w-full text-sm text-gray-600 text-center truncate"
@@ -550,7 +548,7 @@ export const Step3Shareholders: React.FC = () => {
                               Business License{" "}
                               <span className="text-gray-400">(Optional)</span>
                             </label>
-                            <label className="flex flex-col items-center justify-center gap-2 py-4 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                            <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
                               <Upload className="w-5 h-5 text-gray-400" />
                               <span
                                 className="block w-full text-sm text-gray-600 text-center truncate"
@@ -587,7 +585,7 @@ export const Step3Shareholders: React.FC = () => {
                               Other Documents{" "}
                               <span className="text-gray-400">(Optional)</span>
                             </label>
-                            <label className="flex flex-col items-center justify-center gap-2 py-4 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                            <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
                               <Upload className="w-5 h-5 text-gray-400" />
                               <span
                                 className="block w-full text-sm text-gray-600 text-center truncate"
@@ -704,25 +702,6 @@ export const Step3Shareholders: React.FC = () => {
                         )}
                       </div>
 
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-[#212833]">
-                          Shareholding
-                        </label>
-                        <Input
-                          type="text"
-                          placeholder="0 shares (0%)"
-                          value={
-                            shareholder.shareholding?.shares
-                              ? `${shareholder.shareholding.shares} shares (${shareholder.shareholding.percentage}%)`
-                              : ""
-                          }
-                          disabled
-                          className="bg-gray-100 border-gray-300 h-11 text-gray-600"
-                        />
-                        <p className="text-xs text-gray-500 mt-1">
-                          Based on share distribution from Step 3
-                        </p>
-                      </div>
                     </div>
 
                     <div className="mb-6">
@@ -765,7 +744,7 @@ export const Step3Shareholders: React.FC = () => {
                         <label className="block text-sm font-medium text-[#212833]">
                           Passport/ID Upload <span className="text-red-500">*</span>
                         </label>
-                        <label className="flex flex-col items-center justify-center gap-2 py-4 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                        <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
                           <Upload className="w-5 h-5 text-gray-400" />
                           <span
                             className="block w-full text-sm text-gray-600 text-center truncate"
@@ -774,32 +753,21 @@ export const Step3Shareholders: React.FC = () => {
                             {isUploading(shareholder.id, "passport")
                               ? "Uploading..."
                               : shareholder.documents?.passport
-                                ? truncateFileName(
-                                    shareholder.documents.passport.fileName,
-                                  )
+                                ? truncateFileName(shareholder.documents.passport.fileName)
                                 : "Upload Passport"}
                           </span>
-                          <span className="text-xs text-gray-400">
-                            PDF, JPG, PNG · Max 10 MB
-                          </span>
+                          <span className="text-xs text-gray-400">PDF, JPG, PNG · Max 10 MB</span>
                           <input
                             type="file"
                             accept=".pdf,.jpg,.jpeg,.png"
-                            onChange={(e) =>
-                              handleFileUpload(
-                                shareholder.id,
-                                "passport",
-                                e.target.files?.[0] || null,
-                              )
-                            }
+                            onChange={(e) => handleFileUpload(shareholder.id, "passport", e.target.files?.[0] || null)}
                             className="hidden"
                           />
                         </label>
                         {errors?.[`shareholders.${index}.passportFile`] && (
-                          <p className="text-xs text-red-500 mt-1">
-                            {errors[`shareholders.${index}.passportFile`]}
-                          </p>
+                          <p className="text-xs text-red-500 mt-1">{errors[`shareholders.${index}.passportFile`]}</p>
                         )}
+                        <img src="/Scan Passport.png" alt="Passport sample" className="w-full rounded-lg border border-gray-200 mt-1" />
                       </div>
 
                       <div className="space-y-2">
@@ -807,7 +775,7 @@ export const Step3Shareholders: React.FC = () => {
                           Passport Holding Selfie{" "}
                           <span className="text-red-500">*</span>
                         </label>
-                        <label className="flex flex-col items-center justify-center gap-2 py-4 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                        <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
                           <Upload className="w-5 h-5 text-gray-400" />
                           <span
                             className="block w-full text-sm text-gray-600 text-center truncate"
@@ -816,32 +784,21 @@ export const Step3Shareholders: React.FC = () => {
                             {isUploading(shareholder.id, "selfie")
                               ? "Uploading..."
                               : shareholder.documents?.selfie
-                                ? truncateFileName(
-                                    shareholder.documents.selfie.fileName,
-                                  )
+                                ? truncateFileName(shareholder.documents.selfie.fileName)
                                 : "Upload Selfie"}
                           </span>
-                          <span className="text-xs text-gray-400">
-                            JPG, PNG · Max 10 MB
-                          </span>
+                          <span className="text-xs text-gray-400">JPG, PNG · Max 10 MB</span>
                           <input
                             type="file"
                             accept=".jpg,.jpeg,.png"
-                            onChange={(e) =>
-                              handleFileUpload(
-                                shareholder.id,
-                                "selfie",
-                                e.target.files?.[0] || null,
-                              )
-                            }
+                            onChange={(e) => handleFileUpload(shareholder.id, "selfie", e.target.files?.[0] || null)}
                             className="hidden"
                           />
                         </label>
                         {errors?.[`shareholders.${index}.selfieFile`] && (
-                          <p className="text-xs text-red-500 mt-1">
-                            {errors[`shareholders.${index}.selfieFile`]}
-                          </p>
+                          <p className="text-xs text-red-500 mt-1">{errors[`shareholders.${index}.selfieFile`]}</p>
                         )}
+                        <img src="/Upload Selfie.png" alt="Selfie sample" className="w-full rounded-lg border border-gray-200 mt-1" />
                       </div>
 
                       <div className="space-y-2">
@@ -849,7 +806,7 @@ export const Step3Shareholders: React.FC = () => {
                           Proof of Address Upload{" "}
                           <span className="text-red-500">*</span>
                         </label>
-                        <label className="flex flex-col items-center justify-center gap-2 py-4 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                        <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
                           <Upload className="w-5 h-5 text-gray-400" />
                           <span
                             className="block w-full text-sm text-gray-600 text-center truncate"
@@ -858,36 +815,25 @@ export const Step3Shareholders: React.FC = () => {
                             {isUploading(shareholder.id, "addressProof")
                               ? "Uploading..."
                               : shareholder.documents?.addressProof
-                                ? truncateFileName(
-                                    shareholder.documents.addressProof.fileName,
-                                  )
+                                ? truncateFileName(shareholder.documents.addressProof.fileName)
                                 : "Upload Document"}
                           </span>
-                          <span className="text-xs text-gray-400">
-                            PDF, JPG, PNG · Max 10 MB
-                          </span>
+                          <span className="text-xs text-gray-400">PDF, JPG, PNG · Max 10 MB</span>
                           <input
                             type="file"
                             accept=".pdf,.jpg,.jpeg,.png"
-                            onChange={(e) =>
-                              handleFileUpload(
-                                shareholder.id,
-                                "addressProof",
-                                e.target.files?.[0] || null,
-                              )
-                            }
+                            onChange={(e) => handleFileUpload(shareholder.id, "addressProof", e.target.files?.[0] || null)}
                             className="hidden"
                           />
                         </label>
                         {errors?.[`shareholders.${index}.addressProofFile`] && (
-                          <p className="text-xs text-red-500 mt-1">
-                            {errors[`shareholders.${index}.addressProofFile`]}
-                          </p>
+                          <p className="text-xs text-red-500 mt-1">{errors[`shareholders.${index}.addressProofFile`]}</p>
                         )}
+                        <img src="/Upload Proof of Address.png" alt="Address proof sample" className="w-full rounded-lg border border-gray-200 mt-1" />
                       </div>
                     </div>
                   </>
-                )}
+                ) : null}
               </div>
             );
           })}

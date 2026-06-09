@@ -956,24 +956,25 @@ export const useCompanyStore = create<CompanyStoreState>()(
         const { formData } = get();
         set({ isLoading: true, error: null });
 
-        // Internal country code → ISO 3166-1 alpha-2
-        const ISO: Record<string, string> = {
-          "hong-kong": "HK", singapore: "SG", usa: "US",
-          uk: "GB", uae: "AE", china: "CN", india: "IN",
-          japan: "JP", korea: "KR", australia: "AU",
-          canada: "CA", bvi: "VG", cayman: "KY", delaware: "US",
-        };
-        const iso = (code: string) => ISO[code] ?? code;
+        const { countryData } = await import("../lib/countryUtils");
+        const countryIso = (code: string) => countryData[code]?.iso ?? code;
 
         // "+852-12345678" → E.164 "+85212345678"
         const e164 = (phone: string) => phone.replace(/^(\+\d+)-/, "$1");
 
         const payload = {
-          applicant: formData.applicant,
+          applicant: {
+            ...formData.applicant,
+            phone: e164(formData.applicant.phone),
+          },
           company: {
-            ...formData.company,
-            countryOfIncorporation: iso(formData.company.countryOfIncorporation),
+            countryOfIncorporation: countryIso(formData.company.countryOfIncorporation),
+            type: formData.company.type,
+            proposedCompanyName: formData.company.proposedCompanyName,
             alternativeNames: formData.company.alternativeNames.filter((n) => n.trim()),
+            natureOfBusiness: formData.company.natureOfBusiness,
+            businessScope: formData.company.businessScope,
+            businessScopeDescription: formData.company.businessScopeDescription,
           },
           shareCapital: formData.shareCapital,
           persons: formData.persons.map((p) => {
@@ -982,14 +983,13 @@ export const useCompanyStore = create<CompanyStoreState>()(
               return {
                 type: p.type,
                 roles: p.roles,
-                isNominee: !!p.isNominee,
                 fullName: p.fullName,
-                nationality: iso(p.nationality),
+                nationality: countryIso(p.nationality),
                 email: p.email,
-                phone: p.phone,
+                phone: e164(p.phone),
                 residentialAddress: {
                   ...p.residentialAddress,
-                  country: iso(p.residentialAddress.country),
+                  country: countryIso(p.residentialAddress.country),
                 },
                 companyName: null,
                 countryOfIncorporation: null,
@@ -1002,36 +1002,24 @@ export const useCompanyStore = create<CompanyStoreState>()(
             return {
               type: p.type,
               roles: p.roles,
-              isNominee: !!p.isNominee,
-              fullName: null,
+              fullName: p.fullName,
               nationality: null,
-              email: null,
-              phone: null,
+              email: p.email,
+              phone: p.phone ? e164(p.phone) : null,
               residentialAddress: null,
               companyName: p.companyName,
-              countryOfIncorporation: iso(p.countryOfIncorporation ?? ""),
+              countryOfIncorporation: countryIso(p.countryOfIncorporation ?? ""),
               registrationNumber: p.registrationNumber,
               shareholding: isShareholder ? p.shareholding : null,
               documents: p.documents,
             };
           }),
-          services: {
-            banking: {
-              providers: formData.services.banking.providers,
-              preferredProvider: formData.services.banking.preferredProvider || null,
-            },
-            additionalServices: formData.services.additionalServices,
-          },
-          billing: {
-            ...formData.billing,
-            phone: e164(formData.billing.phone),
-            address: {
-              ...formData.billing.address,
-              country: iso(formData.billing.address.country),
-            },
-          },
           complianceAccepted: formData.complianceAccepted,
+          signupUrl: "https://dashboard.mutetaxes.com/signup",
+          loginUrl: "https://dashboard.mutetaxes.com/signin",
         };
+
+        console.log("Submission payload:", JSON.stringify(payload, null, 2));
 
         try {
           const response = await fetch(

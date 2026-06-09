@@ -13,24 +13,16 @@ import {
   useShareholders,
   useDirectors,
   PersonType,
-  ShareholderSelection,
+  // ShareholderSelection, // unused while nominee is disabled
 } from "../../../store/useCompanyStore";
+import { countryData } from "../../../lib/countryUtils";
 
-const nationalityOptions: SelectOption[] = [
-  { value: "hong-kong", label: "Hong Kong" },
-  { value: "singapore", label: "Singapore" },
-  { value: "usa", label: "United States" },
-  { value: "uk", label: "United Kingdom" },
-  { value: "uae", label: "United Arab Emirates" },
-];
+const allCountryOptions: SelectOption[] = Object.values(countryData)
+  .sort((a, b) => a.name.localeCompare(b.name))
+  .map((c) => ({ value: c.code, label: c.name }));
 
-const countryOfIncorporationOptions: SelectOption[] = [
-  { value: "hong-kong", label: "Hong Kong" },
-  { value: "singapore", label: "Singapore" },
-  { value: "usa", label: "United States" },
-  { value: "uk", label: "United Kingdom" },
-  { value: "uae", label: "United Arab Emirates" },
-];
+const nationalityOptions = allCountryOptions;
+const countryOfIncorporationOptions = allCountryOptions;
 
 const directorTypeOptions: { value: PersonType; label: string }[] = [
   { value: "individual", label: "Individual" },
@@ -81,47 +73,47 @@ export const Step4Directors: React.FC = () => {
     setExpandedDirectors([id]);
   };
 
-  const handleSelectionChange = (id: string, value: ShareholderSelection) => {
-    if (value === "nominee") {
-      updatePerson(id, {
-        shareholderSelection: "nominee",
-        isNominee: true,
-        type: "individual",
-        fullName: "Nominee Director",
-        companyName: "",
-        countryOfIncorporation: null,
-        registrationNumber: null,
-        nationality: "",
-        email: "",
-        phone: "",
-        residentialAddress: {
-          street: "",
-          city: "",
-          state: "",
-          postalCode: "",
-          country: "",
-        },
-        documents: {
-          passport: null,
-          selfie: null,
-          addressProof: null,
-          certificate_of_incorporation: null,
-          business_license: null,
-          others: null,
-        },
-      });
-      // Collapse the form if it was expanded
-      setExpandedDirectors((prev) => prev.filter((eid) => eid !== id));
-      setFormErrors({});
-      setFormMessage(null);
-    } else {
-      updatePerson(id, {
-        shareholderSelection: "own_name",
-        isNominee: false,
-        fullName: "",
-      });
-    }
-  };
+  // Nominee selection disabled — only "own_name" is supported
+  // const handleSelectionChange = (id: string, value: ShareholderSelection) => {
+  //   if (value === "nominee") {
+  //     updatePerson(id, {
+  //       shareholderSelection: "nominee",
+  //       isNominee: true,
+  //       type: "individual",
+  //       fullName: "Nominee Director",
+  //       companyName: "",
+  //       countryOfIncorporation: null,
+  //       registrationNumber: null,
+  //       nationality: "",
+  //       email: "",
+  //       phone: "",
+  //       residentialAddress: {
+  //         street: "",
+  //         city: "",
+  //         state: "",
+  //         postalCode: "",
+  //         country: "",
+  //       },
+  //       documents: {
+  //         passport: null,
+  //         selfie: null,
+  //         addressProof: null,
+  //         certificate_of_incorporation: null,
+  //         business_license: null,
+  //         others: null,
+  //       },
+  //     });
+  //     setExpandedDirectors((prev) => prev.filter((eid) => eid !== id));
+  //     setFormErrors({});
+  //     setFormMessage(null);
+  //   } else {
+  //     updatePerson(id, {
+  //       shareholderSelection: "own_name",
+  //       isNominee: false,
+  //       fullName: "",
+  //     });
+  //   }
+  // };
 
   const addDirector = (shareholderId?: string) => {
     if (expandedDirectors.length > 0) {
@@ -156,12 +148,13 @@ export const Step4Directors: React.FC = () => {
     const dir = directors.find((d) => d.id === id);
     if (!dir) return;
 
-    if (dir.isNominee || dir.shareholderSelection === "nominee") {
-      setFormErrors({});
-      setFormMessage(null);
-      setExpandedDirectors([]);
-      return;
-    }
+    // Nominee fast-path disabled
+    // if (dir.isNominee || dir.shareholderSelection === "nominee") {
+    //   setFormErrors({});
+    //   setFormMessage(null);
+    //   setExpandedDirectors([]);
+    //   return;
+    // }
 
     const errs: Record<string, string> = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -413,8 +406,8 @@ export const Step4Directors: React.FC = () => {
           <div className="space-y-4">
             {directors.map((director, index) => {
               const isExpanded = expandedDirectors.includes(director.id);
-              const isNomineeDirector =
-                director.isNominee || director.shareholderSelection === "nominee";
+              // const isNomineeDirector =
+              //   director.isNominee || director.shareholderSelection === "nominee";
               // Directors added via Quick Add already have shareholder role — no selection toggle needed
               const isFromShareholder = director.roles.includes("shareholder");
 
@@ -456,8 +449,8 @@ export const Step4Directors: React.FC = () => {
                   {/* Expanded Form — only for manually added directors when expanded */}
                   {isExpanded && !isFromShareholder && (
                     <div className="p-6 pt-2 space-y-4 border-t">
-                      {/* Nominee / Own Name Toggle */}
-                      <div className="space-y-2">
+                      {/* Nominee toggle removed — only Own Name is supported */}
+                      {/* <div className="space-y-2">
                         <label className="block text-sm font-medium text-[#212833]">
                           Director Selection <span className="text-red-500">*</span>
                         </label>
@@ -497,10 +490,15 @@ export const Step4Directors: React.FC = () => {
                             Nominee director selected. No additional details required.
                           </p>
                         )}
+                      </div> */}
+                      <div className="mb-2">
+                        <span className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#6896ff] to-[#004eff] text-white text-sm font-semibold">
+                          Own Name
+                        </span>
                       </div>
 
-                      {/* Director details — hidden when nominee selected */}
-                      {!isNomineeDirector && (
+                      {/* Director details — always shown (nominee disabled) */}
+                      {true && (
                         <>
                           <div className="space-y-2">
                             <label className="block text-sm font-medium text-[#212833]">
@@ -585,7 +583,7 @@ export const Step4Directors: React.FC = () => {
                                   <label className="block text-sm font-medium text-[#212833]">
                                     Certificate of Incorporation <span className="text-red-500">*</span>
                                   </label>
-                                  <label className="flex flex-col items-center justify-center gap-2 py-4 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                                  <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
                                     <Upload className="w-5 h-5 text-gray-400" />
                                     <span className="block w-full text-sm text-gray-600 text-center truncate" title={director.documents?.certificate_of_incorporation?.fileName}>
                                       {isUploading(director.id, "certificate_of_incorporation") ? "Uploading..." : director.documents?.certificate_of_incorporation ? truncateFileName(director.documents.certificate_of_incorporation.fileName) : "Upload Certificate"}
@@ -601,7 +599,7 @@ export const Step4Directors: React.FC = () => {
                                   <label className="block text-sm font-medium text-[#212833]">
                                     Business License <span className="text-red-500">*</span>
                                   </label>
-                                  <label className="flex flex-col items-center justify-center gap-2 py-4 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                                  <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
                                     <Upload className="w-5 h-5 text-gray-400" />
                                     <span className="block w-full text-sm text-gray-600 text-center truncate" title={director.documents?.business_license?.fileName}>
                                       {isUploading(director.id, "business_license") ? "Uploading..." : director.documents?.business_license ? truncateFileName(director.documents.business_license.fileName) : "Upload License"}
@@ -615,7 +613,7 @@ export const Step4Directors: React.FC = () => {
                                 </div>
                                 <div className="space-y-2">
                                   <label className="block text-sm font-medium text-[#212833]">Other Documents</label>
-                                  <label className="flex flex-col items-center justify-center gap-2 py-4 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                                  <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
                                     <Upload className="w-5 h-5 text-gray-400" />
                                     <span className="block w-full text-sm text-gray-600 text-center truncate" title={director.documents?.others?.fileName}>
                                       {isUploading(director.id, "others") ? "Uploading..." : director.documents?.others ? truncateFileName(director.documents.others.fileName) : "Upload Document"}
@@ -725,7 +723,7 @@ export const Step4Directors: React.FC = () => {
                               <label className="block text-sm font-medium text-[#212833]">
                                 Passport/ID Upload <span className="text-red-500">*</span>
                               </label>
-                              <label className="flex flex-col items-center justify-center gap-2 py-4 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                              <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
                                 <Upload className="w-5 h-5 text-gray-400" />
                                 <span className="block w-full text-sm text-gray-600 text-center truncate" title={director.documents?.passport?.fileName}>
                                   {isUploading(director.id, "passport") ? "Uploading..." : director.documents?.passport ? truncateFileName(director.documents.passport.fileName) : "Upload Passport"}
@@ -736,12 +734,13 @@ export const Step4Directors: React.FC = () => {
                               {(formErrors.passportFile || errors?.[`directors.${index}.passportFile`]) && (
                                 <p className="text-xs text-red-500 mt-1">{formErrors.passportFile || errors?.[`directors.${index}.passportFile`]}</p>
                               )}
+                              <img src="/Scan Passport.png" alt="Passport sample" className="w-full rounded-lg border border-gray-200 mt-1" />
                             </div>
                             <div className="space-y-2">
                               <label className="block text-sm font-medium text-[#212833]">
                                 Passport Holding Selfie <span className="text-red-500">*</span>
                               </label>
-                              <label className="flex flex-col items-center justify-center gap-2 py-4 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                              <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
                                 <Upload className="w-5 h-5 text-gray-400" />
                                 <span className="block w-full text-sm text-gray-600 text-center truncate" title={director.documents?.selfie?.fileName}>
                                   {isUploading(director.id, "selfie") ? "Uploading..." : director.documents?.selfie ? truncateFileName(director.documents.selfie.fileName) : "Upload Selfie"}
@@ -752,12 +751,13 @@ export const Step4Directors: React.FC = () => {
                               {(formErrors.selfieFile || errors?.[`directors.${index}.selfieFile`]) && (
                                 <p className="text-xs text-red-500 mt-1">{formErrors.selfieFile || errors?.[`directors.${index}.selfieFile`]}</p>
                               )}
+                              <img src="/Upload Selfie.png" alt="Selfie sample" className="w-full rounded-lg border border-gray-200 mt-1" />
                             </div>
                             <div className="space-y-2">
                               <label className="block text-sm font-medium text-[#212833]">
                                 Proof of Address Upload <span className="text-red-500">*</span>
                               </label>
-                              <label className="flex flex-col items-center justify-center gap-2 py-4 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                              <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
                                 <Upload className="w-5 h-5 text-gray-400" />
                                 <span className="block w-full text-sm text-gray-600 text-center truncate" title={director.documents?.addressProof?.fileName}>
                                   {isUploading(director.id, "addressProof") ? "Uploading..." : director.documents?.addressProof ? truncateFileName(director.documents.addressProof.fileName) : "Upload Document"}
@@ -768,6 +768,7 @@ export const Step4Directors: React.FC = () => {
                               {(formErrors.addressProofFile || errors?.[`directors.${index}.addressProofFile`]) && (
                                 <p className="text-xs text-red-500 mt-1">{formErrors.addressProofFile || errors?.[`directors.${index}.addressProofFile`]}</p>
                               )}
+                              <img src="/Upload Proof of Address.png" alt="Address proof sample" className="w-full rounded-lg border border-gray-200 mt-1" />
                             </div>
                           </div>
 

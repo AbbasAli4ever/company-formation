@@ -2,6 +2,7 @@ import React from "react";
 import { cn } from "../../lib/utils";
 import { Input } from "./input";
 import { Select, SelectOption } from "./select";
+import { countryData } from "../../lib/countryUtils";
 
 export interface AddressData {
   street: string;
@@ -11,13 +12,9 @@ export interface AddressData {
   country: string;
 }
 
-const countryOptions: SelectOption[] = [
-  { value: "hong-kong", label: "Hong Kong" },
-  { value: "singapore", label: "Singapore" },
-  { value: "usa", label: "United States" },
-  { value: "uk", label: "United Kingdom" },
-  { value: "uae", label: "United Arab Emirates" },
-];
+const countryOptions: SelectOption[] = Object.values(countryData)
+  .sort((a, b) => a.name.localeCompare(b.name))
+  .map((c) => ({ value: c.code, label: c.name }));
 
 interface AddressInputProps {
   value: AddressData;

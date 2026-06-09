@@ -8,8 +8,8 @@ import { Step1CompanyInfo } from "./steps/Step1CompanyInfo";
 import { Step2ShareCapital } from "./steps/Step2ShareCapital";
 import { Step3Shareholders } from "./steps/Step3Shareholders";
 import { Step4Directors } from "./steps/Step4Directors";
-import { Step5Services } from "./steps/Step5Services";
-import { Step7Billing } from "./steps/Step7Billing";
+// import { Step5Services } from "./steps/Step5Services"; // disabled for now
+// import { Step7Billing } from "./steps/Step7Billing";   // disabled for now
 import { Step8Review } from "./steps/Step8Review";
 
 const steps = [
@@ -17,9 +17,9 @@ const steps = [
   { number: 2, label: "Shareholders" },
   { number: 3, label: "Share Capital" },
   { number: 4, label: "Directors" },
-  { number: 5, label: "Services" },
-  { number: 6, label: "Billing" },
-  { number: 7, label: "Review" },
+  { number: 5, label: "Review" },
+  // { number: 6, label: "Services" },  // disabled for now
+  // { number: 7, label: "Billing" },   // disabled for now
 ];
 
 const MOBILE_STEP_WIDTH = 80;
@@ -81,15 +81,14 @@ export const CompanyFormation: React.FC = () => {
   };
 
   const canProceed = () => {
-    if (currentStep === 7) {
+    if (currentStep === 5) {
       return formData.complianceAccepted.isAccepted;
     }
     return true;
   };
 
-  const progressPercentage = Math.round((currentStep / 7) * 100);
+  const progressPercentage = Math.round((currentStep / 5) * 100);
 
-  // Simplified renderStep - components now use store directly
   const renderStep = () => {
     switch (currentStep) {
       case 1:
@@ -101,11 +100,9 @@ export const CompanyFormation: React.FC = () => {
       case 4:
         return <Step4Directors />;
       case 5:
-        return <Step5Services />;
-      case 6:
-        return <Step7Billing />;
-      case 7:
         return <Step8Review />;
+      // case 6: return <Step5Services />; // disabled for now
+      // case 7: return <Step7Billing />;  // disabled for now
       default:
         return null;
     }
@@ -129,7 +126,7 @@ export const CompanyFormation: React.FC = () => {
           <div className="mb-6 md:mb-8">
             <div className="flex items-center justify-between mb-4">
               <span className="text-sm font-medium text-[#212833]">
-                Step {currentStep} of 7
+                Step {currentStep} of 5
               </span>
               <span className="text-sm font-semibold text-[#004eff]">
                 Progress: {progressPercentage}%
@@ -203,10 +200,10 @@ export const CompanyFormation: React.FC = () => {
 
             {/* Desktop Steps */}
             <div className="hidden md:block">
-              <div className="flex items-center gap-2 lg:gap-3 justify-center">
+              <div className="relative flex items-start justify-between w-full">
                 {steps.map((step, index) => (
                   <React.Fragment key={step.number}>
-                    <div className="flex flex-col items-center py-1">
+                    <div className="flex flex-col items-center z-10 flex-shrink-0">
                       <div
                         className={`w-12 h-12 rounded-full flex items-center justify-center font-semibold text-sm transition-all duration-300 ${
                           currentStep > step.number
@@ -235,13 +232,15 @@ export const CompanyFormation: React.FC = () => {
                       </span>
                     </div>
                     {index < steps.length - 1 && (
-                      <div
-                        className={`h-0.5 w-16 mb-6 transition-all duration-300 ${
-                          currentStep > step.number
-                            ? "bg-green-500"
-                            : "bg-gray-200"
-                        }`}
-                      />
+                      <div className="flex-1 self-start mt-6 px-2">
+                        <div
+                          className={`h-0.5 w-full transition-all duration-300 ${
+                            currentStep > step.number
+                              ? "bg-green-500"
+                              : "bg-gray-200"
+                          }`}
+                        />
+                      </div>
                     )}
                   </React.Fragment>
                 ))}
@@ -256,7 +255,7 @@ export const CompanyFormation: React.FC = () => {
             <h2 className="text-2xl font-bold text-[#212833] mb-1">
               {steps[currentStep - 1]?.label}
             </h2>
-            <p className="text-sm text-gray-500">Step {currentStep} of 7</p>
+            <p className="text-sm text-gray-500">Step {currentStep} of 5</p>
           </div>
           {renderStep()}
         </div>
@@ -273,7 +272,7 @@ export const CompanyFormation: React.FC = () => {
             Back
           </Button>
 
-          {currentStep < 7 ? (
+          {currentStep < 5 ? (
             <Button
               onClick={handleNext}
               className="h-12 px-8 rounded-full bg-gradient-to-r from-[#6896ff] to-[#004eff] hover:opacity-90 transition-all shadow-lg hover:shadow-xl"

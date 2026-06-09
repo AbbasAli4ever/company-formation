@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { cn } from "../../lib/utils";
 import {
   countryData,
@@ -16,6 +16,10 @@ interface PhoneInputProps {
   disabled?: boolean;
 }
 
+const allCountries = Object.values(countryData).sort((a, b) =>
+  a.name.localeCompare(b.name),
+);
+
 export const PhoneInput: React.FC<PhoneInputProps> = ({
   value,
   onChange,
@@ -26,10 +30,11 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
   disabled,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState("");
   const [selectedCountry, setSelectedCountry] = useState(defaultCountryCode);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const searchRef = useRef<HTMLInputElement>(null);
 
-  // Parse incoming value
   useEffect(() => {
     if (value) {
       const parsed = parsePhoneNumber(value, defaultCountryCode);
@@ -41,27 +46,33 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
     }
   }, [value, defaultCountryCode]);
 
+  useEffect(() => {
+    if (isOpen) {
+      setSearch("");
+      setTimeout(() => searchRef.current?.focus(), 50);
+    }
+  }, [isOpen]);
+
   const handleCountryChange = (countryCode: string) => {
     setSelectedCountry(countryCode);
     setIsOpen(false);
-    // Update the combined value
-    const newValue = formatPhoneNumber(countryCode, phoneNumber);
-    onChange(newValue);
+    onChange(formatPhoneNumber(countryCode, phoneNumber));
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newNumber = e.target.value.replace(/[^0-9]/g, "");
     setPhoneNumber(newNumber);
-    // Update the combined value
-    const newValue = formatPhoneNumber(selectedCountry, newNumber);
-    onChange(newValue);
+    onChange(formatPhoneNumber(selectedCountry, newNumber));
   };
 
-  // Only show the 5 supported countries
-  const supportedCountryCodes = ["hong-kong", "singapore", "usa", "uk", "uae"];
-  const countries = Object.values(countryData).filter((c) =>
-    supportedCountryCodes.includes(c.code),
-  );
+  const filteredCountries = search.trim()
+    ? allCountries.filter(
+        (c) =>
+          c.name.toLowerCase().includes(search.toLowerCase()) ||
+          c.phoneCode.includes(search),
+      )
+    : allCountries;
+
   const currentCountry =
     countryData[selectedCountry] || countryData["hong-kong"];
 
@@ -104,23 +115,43 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
 
         {/* Dropdown */}
         {isOpen && (
-          <div className="absolute top-full left-0 mt-1 w-64 max-h-60 overflow-auto bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-            {countries.map((country) => (
-              <button
-                key={country.code}
-                type="button"
-                onClick={() => handleCountryChange(country.code)}
-                className={cn(
-                  "flex items-center gap-2 w-full px-3 py-2 text-left text-sm hover:bg-gray-50",
-                  selectedCountry === country.code &&
-                    "bg-blue-50 text-blue-700",
-                )}
-              >
-                <span className="text-base">{country.flag}</span>
-                <span className="font-medium">{country.phoneCode}</span>
-                <span className="text-gray-500 truncate">{country.name}</span>
-              </button>
-            ))}
+          <div className="absolute top-full left-0 mt-1 w-72 bg-white border border-gray-200 rounded-lg shadow-lg z-50 flex flex-col">
+            <div className="p-2 border-b border-gray-100">
+              <input
+                ref={searchRef}
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search country or code..."
+                className="w-full px-2 py-1.5 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div className="overflow-y-auto max-h-52">
+              {filteredCountries.length === 0 ? (
+                <p className="px-3 py-4 text-sm text-gray-500 text-center">
+                  No countries found
+                </p>
+              ) : (
+                filteredCountries.map((country) => (
+                  <button
+                    key={country.code}
+                    type="button"
+                    onClick={() => handleCountryChange(country.code)}
+                    className={cn(
+                      "flex items-center gap-2 w-full px-3 py-2 text-left text-sm hover:bg-gray-50",
+                      selectedCountry === country.code &&
+                        "bg-blue-50 text-blue-700",
+                    )}
+                  >
+                    <span className="text-base">{country.flag}</span>
+                    <span className="font-medium w-12 shrink-0">
+                      {country.phoneCode}
+                    </span>
+                    <span className="text-gray-500 truncate">{country.name}</span>
+                  </button>
+                ))
+              )}
+            </div>
           </div>
         )}
       </div>
