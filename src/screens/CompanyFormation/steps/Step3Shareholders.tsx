@@ -840,12 +840,6 @@ export const Step3Shareholders: React.FC = () => {
         </div>
       )}
 
-      <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <p className="text-sm text-blue-800">
-          <strong>Note:</strong> In Step 3, set final ownership to total 100%.
-          If nominee is 100%, distribution is locked to nominee.
-        </p>
-      </div>
     </div>
   );
 };
