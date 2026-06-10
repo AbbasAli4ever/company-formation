@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "../../components/ui/button";
 import { useCompanyStore } from "../../store/useCompanyStore";
 
@@ -47,7 +48,10 @@ export const CompanyFormation: React.FC = () => {
     isSuccess,
     validateStep,
     clearStepErrors,
+    validateEmail,
   } = useCompanyStore();
+
+  const [isValidatingEmail, setIsValidatingEmail] = useState(false);
 
   // Scroll to top on step change
   useEffect(() => {
@@ -73,11 +77,19 @@ export const CompanyFormation: React.FC = () => {
     );
   }
 
-  const handleNext = () => {
-    if (validateStep(currentStep)) {
-      clearStepErrors();
-      nextStep();
+  const handleNext = async () => {
+    if (!validateStep(currentStep)) return;
+    if (currentStep === 1) {
+      setIsValidatingEmail(true);
+      const result = await validateEmail();
+      setIsValidatingEmail(false);
+      if (!result.ok) {
+        toast.error(result.error);
+        return;
+      }
     }
+    clearStepErrors();
+    nextStep();
   };
 
   const canProceed = () => {
@@ -275,8 +287,12 @@ export const CompanyFormation: React.FC = () => {
           {currentStep < 5 ? (
             <Button
               onClick={handleNext}
-              className="h-12 px-8 rounded-full bg-gradient-to-r from-[#6896ff] to-[#004eff] hover:opacity-90 transition-all shadow-lg hover:shadow-xl"
+              disabled={isValidatingEmail}
+              className="h-12 px-8 rounded-full bg-gradient-to-r from-[#6896ff] to-[#004eff] hover:opacity-90 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
+              {isValidatingEmail ? (
+                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+              ) : null}
               Next
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>

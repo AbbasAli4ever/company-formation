@@ -292,6 +292,7 @@ interface CompanyStoreState {
   // Validation & Submission
   validateStep: (step: number) => boolean;
   clearStepErrors: () => void;
+  validateEmail: () => Promise<{ ok: boolean; error?: string }>;
   submitApplication: () => Promise<void>;
   resetForm: () => void;
 
@@ -949,6 +950,31 @@ export const useCompanyStore = create<CompanyStoreState>()(
       },
 
       clearStepErrors: () => set({ stepErrors: {} }),
+
+      validateEmail: async () => {
+        const { formData } = get();
+        const email = formData.applicant.email;
+        try {
+          const res = await fetch(
+            `${API_BASE}/api/v1/registrations/validate?email=${encodeURIComponent(email)}`,
+            { headers: { accept: "application/json" } },
+          );
+          const data = await res.json().catch(() => ({}));
+          if (data?.isRegistered) {
+            const errorMsg = data.error ?? "This email is already registered. Please use a different email.";
+            set((s) => ({
+              stepErrors: {
+                ...s.stepErrors,
+                1: { email: errorMsg },
+              },
+            }));
+            return { ok: false, error: errorMsg };
+          }
+          return { ok: true };
+        } catch {
+          return { ok: true };
+        }
+      },
 
       // ==================== SUBMISSION ====================
 
