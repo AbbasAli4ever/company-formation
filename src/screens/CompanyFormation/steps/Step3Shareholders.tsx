@@ -321,7 +321,7 @@ export const Step3Shareholders: React.FC = () => {
                   <label className="block text-sm font-medium text-[#212833]">
                     Shareholder Selection <span className="text-red-500">*</span>
                   </label>
-                  <div className="p-1 rounded-full bg-gradient-to-r w-[300px] from-[#6896ff] to-[#004eff]">
+                  <div className="p-1 rounded-full bg-gradient-to-r w-[300px] from-[#2E5FD8] to-[#3878F6]">
                     <div className="grid grid-cols-2 gap-1">
                       {[
                         { value: "own_name", label: "Own Name" },
@@ -343,7 +343,7 @@ export const Step3Shareholders: React.FC = () => {
                             }
                             className={`h-11 rounded-full text-sm font-semibold transition-all duration-200 ${
                               isActive
-                                ? "bg-white text-[#004eff] shadow-sm"
+                                ? "bg-white text-[#3878F6] shadow-sm"
                                 : "bg-transparent text-white hover:bg-white/15"
                             }`}
                             aria-pressed={isActive}
@@ -356,7 +356,7 @@ export const Step3Shareholders: React.FC = () => {
                   </div>
                 </div> */}
                 <div className="mb-6">
-                  <span className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#6896ff] to-[#004eff] text-white text-sm font-semibold">
+                  <span className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#2E5FD8] to-[#3878F6] text-white text-sm font-semibold">
                     Own Name
                   </span>
                 </div>
@@ -499,7 +499,7 @@ export const Step3Shareholders: React.FC = () => {
                               Certificate of Incorporation{" "}
                               <span className="text-red-500">*</span>
                             </label>
-                            <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                            <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#3878F6] hover:bg-blue-50/30 cursor-pointer transition-colors">
                               <Upload className="w-5 h-5 text-gray-400" />
                               <span
                                 className="block w-full text-sm text-gray-600 text-center truncate"
@@ -548,7 +548,7 @@ export const Step3Shareholders: React.FC = () => {
                               Business License{" "}
                               <span className="text-gray-400">(Optional)</span>
                             </label>
-                            <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                            <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#3878F6] hover:bg-blue-50/30 cursor-pointer transition-colors">
                               <Upload className="w-5 h-5 text-gray-400" />
                               <span
                                 className="block w-full text-sm text-gray-600 text-center truncate"
@@ -585,7 +585,7 @@ export const Step3Shareholders: React.FC = () => {
                               Other Documents{" "}
                               <span className="text-gray-400">(Optional)</span>
                             </label>
-                            <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                            <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#3878F6] hover:bg-blue-50/30 cursor-pointer transition-colors">
                               <Upload className="w-5 h-5 text-gray-400" />
                               <span
                                 className="block w-full text-sm text-gray-600 text-center truncate"
@@ -744,7 +744,7 @@ export const Step3Shareholders: React.FC = () => {
                         <label className="block text-sm font-medium text-[#212833]">
                           Passport/ID Upload <span className="text-red-500">*</span>
                         </label>
-                        <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                        <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#3878F6] hover:bg-blue-50/30 cursor-pointer transition-colors">
                           <Upload className="w-5 h-5 text-gray-400" />
                           <span
                             className="block w-full text-sm text-gray-600 text-center truncate"
@@ -775,7 +775,7 @@ export const Step3Shareholders: React.FC = () => {
                           Passport Holding Selfie{" "}
                           <span className="text-red-500">*</span>
                         </label>
-                        <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                        <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#3878F6] hover:bg-blue-50/30 cursor-pointer transition-colors">
                           <Upload className="w-5 h-5 text-gray-400" />
                           <span
                             className="block w-full text-sm text-gray-600 text-center truncate"
@@ -806,7 +806,7 @@ export const Step3Shareholders: React.FC = () => {
                           Proof of Address Upload{" "}
                           <span className="text-red-500">*</span>
                         </label>
-                        <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                        <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#3878F6] hover:bg-blue-50/30 cursor-pointer transition-colors">
                           <Upload className="w-5 h-5 text-gray-400" />
                           <span
                             className="block w-full text-sm text-gray-600 text-center truncate"

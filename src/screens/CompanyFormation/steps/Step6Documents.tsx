@@ -146,7 +146,7 @@ export const Step6Documents: React.FC<Step6Props> = ({
 
                   {/* Upload Box */}
                   <label className="block cursor-pointer">
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 bg-[#f5f7fa] hover:border-[#004eff] transition-colors">
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 bg-[#f5f7fa] hover:border-[#3878F6] transition-colors">
                       <div className="flex flex-col items-center justify-center gap-2">
                         <Upload className="w-6 h-6 text-gray-400" />
                         <p className="text-sm font-medium text-[#212833]">
@@ -216,7 +216,7 @@ export const Step6Documents: React.FC<Step6Props> = ({
 
                   {/* Upload Box */}
                   <label className="block cursor-pointer">
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 bg-[#f5f7fa] hover:border-[#004eff] transition-colors">
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 bg-[#f5f7fa] hover:border-[#3878F6] transition-colors">
                       <div className="flex flex-col items-center justify-center gap-2">
                         <Upload className="w-6 h-6 text-gray-400" />
                         <p className="text-sm font-medium text-[#212833]">
@@ -286,7 +286,7 @@ export const Step6Documents: React.FC<Step6Props> = ({
 
                   {/* Upload Box */}
                   <label className="block cursor-pointer">
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 bg-[#f5f7fa] hover:border-[#004eff] transition-colors">
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 bg-[#f5f7fa] hover:border-[#3878F6] transition-colors">
                       <div className="flex flex-col items-center justify-center gap-2">
                         <Upload className="w-6 h-6 text-gray-400" />
                         <p className="text-sm font-medium text-[#212833]">

@@ -151,6 +151,7 @@ export const Step2ShareCapital: React.FC = () => {
         </p>
       </div>
 
+      {/* Share Capital Amount and Total Shares — disabled for now, re-enable when needed
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <label className="block text-base font-medium text-[#212833]">
@@ -195,6 +196,7 @@ export const Step2ShareCapital: React.FC = () => {
           <p className="text-sm text-gray-500 mt-1">Standard: 10,000 shares</p>
         </div>
       </div>
+      */}
 
       {errors?.shareDistribution && (
         <p className="text-xs text-red-500 bg-red-50 border border-red-200 rounded-md px-3 py-2">
@@ -351,6 +353,7 @@ export const Step2ShareCapital: React.FC = () => {
                       )}
                     </div>
 
+                    {/* Number of Shares — disabled for now, re-enable when needed
                     <div className="space-y-2">
                       <label className="block text-sm font-medium text-[#212833]">
                         Number of Shares
@@ -366,6 +369,7 @@ export const Step2ShareCapital: React.FC = () => {
                         Auto-calculated from ownership %
                       </p>
                     </div>
+                    */}
                   </div>
                 </div>
               );

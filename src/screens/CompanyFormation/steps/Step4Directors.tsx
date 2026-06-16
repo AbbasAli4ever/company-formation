@@ -454,7 +454,7 @@ export const Step4Directors: React.FC = () => {
                         <label className="block text-sm font-medium text-[#212833]">
                           Director Selection <span className="text-red-500">*</span>
                         </label>
-                        <div className="p-1 rounded-full bg-gradient-to-r w-[300px] from-[#6896ff] to-[#004eff]">
+                        <div className="p-1 rounded-full bg-gradient-to-r w-[300px] from-[#2E5FD8] to-[#3878F6]">
                           <div className="grid grid-cols-2 gap-1">
                             {[
                               { value: "own_name", label: "Own Name" },
@@ -474,7 +474,7 @@ export const Step4Directors: React.FC = () => {
                                   }
                                   className={`h-11 rounded-full text-sm font-semibold transition-all duration-200 ${
                                     isActive
-                                      ? "bg-white text-[#004eff] shadow-sm"
+                                      ? "bg-white text-[#3878F6] shadow-sm"
                                       : "bg-transparent text-white hover:bg-white/15"
                                   }`}
                                   aria-pressed={isActive}
@@ -492,7 +492,7 @@ export const Step4Directors: React.FC = () => {
                         )}
                       </div> */}
                       <div className="mb-2">
-                        <span className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#6896ff] to-[#004eff] text-white text-sm font-semibold">
+                        <span className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#2E5FD8] to-[#3878F6] text-white text-sm font-semibold">
                           Own Name
                         </span>
                       </div>
@@ -583,7 +583,7 @@ export const Step4Directors: React.FC = () => {
                                   <label className="block text-sm font-medium text-[#212833]">
                                     Certificate of Incorporation <span className="text-red-500">*</span>
                                   </label>
-                                  <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                                  <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#3878F6] hover:bg-blue-50/30 cursor-pointer transition-colors">
                                     <Upload className="w-5 h-5 text-gray-400" />
                                     <span className="block w-full text-sm text-gray-600 text-center truncate" title={director.documents?.certificate_of_incorporation?.fileName}>
                                       {isUploading(director.id, "certificate_of_incorporation") ? "Uploading..." : director.documents?.certificate_of_incorporation ? truncateFileName(director.documents.certificate_of_incorporation.fileName) : "Upload Certificate"}
@@ -599,7 +599,7 @@ export const Step4Directors: React.FC = () => {
                                   <label className="block text-sm font-medium text-[#212833]">
                                     Business License <span className="text-red-500">*</span>
                                   </label>
-                                  <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                                  <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#3878F6] hover:bg-blue-50/30 cursor-pointer transition-colors">
                                     <Upload className="w-5 h-5 text-gray-400" />
                                     <span className="block w-full text-sm text-gray-600 text-center truncate" title={director.documents?.business_license?.fileName}>
                                       {isUploading(director.id, "business_license") ? "Uploading..." : director.documents?.business_license ? truncateFileName(director.documents.business_license.fileName) : "Upload License"}
@@ -613,7 +613,7 @@ export const Step4Directors: React.FC = () => {
                                 </div>
                                 <div className="space-y-2">
                                   <label className="block text-sm font-medium text-[#212833]">Other Documents</label>
-                                  <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                                  <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#3878F6] hover:bg-blue-50/30 cursor-pointer transition-colors">
                                     <Upload className="w-5 h-5 text-gray-400" />
                                     <span className="block w-full text-sm text-gray-600 text-center truncate" title={director.documents?.others?.fileName}>
                                       {isUploading(director.id, "others") ? "Uploading..." : director.documents?.others ? truncateFileName(director.documents.others.fileName) : "Upload Document"}
@@ -723,7 +723,7 @@ export const Step4Directors: React.FC = () => {
                               <label className="block text-sm font-medium text-[#212833]">
                                 Passport/ID Upload <span className="text-red-500">*</span>
                               </label>
-                              <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                              <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#3878F6] hover:bg-blue-50/30 cursor-pointer transition-colors">
                                 <Upload className="w-5 h-5 text-gray-400" />
                                 <span className="block w-full text-sm text-gray-600 text-center truncate" title={director.documents?.passport?.fileName}>
                                   {isUploading(director.id, "passport") ? "Uploading..." : director.documents?.passport ? truncateFileName(director.documents.passport.fileName) : "Upload Passport"}
@@ -740,7 +740,7 @@ export const Step4Directors: React.FC = () => {
                               <label className="block text-sm font-medium text-[#212833]">
                                 Passport Holding Selfie <span className="text-red-500">*</span>
                               </label>
-                              <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                              <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#3878F6] hover:bg-blue-50/30 cursor-pointer transition-colors">
                                 <Upload className="w-5 h-5 text-gray-400" />
                                 <span className="block w-full text-sm text-gray-600 text-center truncate" title={director.documents?.selfie?.fileName}>
                                   {isUploading(director.id, "selfie") ? "Uploading..." : director.documents?.selfie ? truncateFileName(director.documents.selfie.fileName) : "Upload Selfie"}
@@ -757,7 +757,7 @@ export const Step4Directors: React.FC = () => {
                               <label className="block text-sm font-medium text-[#212833]">
                                 Proof of Address Upload <span className="text-red-500">*</span>
                               </label>
-                              <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#004eff] hover:bg-blue-50/30 cursor-pointer transition-colors">
+                              <label className="flex flex-col items-center justify-center gap-2 h-32 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-white hover:border-[#3878F6] hover:bg-blue-50/30 cursor-pointer transition-colors">
                                 <Upload className="w-5 h-5 text-gray-400" />
                                 <span className="block w-full text-sm text-gray-600 text-center truncate" title={director.documents?.addressProof?.fileName}>
                                   {isUploading(director.id, "addressProof") ? "Uploading..." : director.documents?.addressProof ? truncateFileName(director.documents.addressProof.fileName) : "Upload Document"}
@@ -777,7 +777,7 @@ export const Step4Directors: React.FC = () => {
                             <Button
                               type="button"
                               onClick={() => saveDirector(director.id)}
-                              className="h-10 px-8 bg-[#004eff] hover:bg-[#0040cc] text-white"
+                              className="h-10 px-8 bg-[#3878F6] hover:bg-[#2554d4] text-white"
                             >
                               Save Director
                             </Button>

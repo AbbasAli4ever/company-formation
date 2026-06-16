@@ -140,13 +140,13 @@ export const CompanyFormation: React.FC = () => {
               <span className="text-sm font-medium text-[#212833]">
                 Step {currentStep} of 5
               </span>
-              <span className="text-sm font-semibold text-[#004eff]">
+              <span className="text-sm font-semibold text-[#3878F6]">
                 Progress: {progressPercentage}%
               </span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
               <div
-                className="bg-gradient-to-r from-[#6896ff] to-[#004eff] h-2.5 rounded-full transition-all duration-500 ease-out"
+                className="bg-gradient-to-r from-[#2E5FD8] to-[#3878F6] h-2.5 rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${progressPercentage}%` }}
               />
             </div>
@@ -174,7 +174,7 @@ export const CompanyFormation: React.FC = () => {
                           currentStep > step.number
                             ? "bg-green-500 text-white"
                             : currentStep === step.number
-                              ? "bg-[#004eff] text-white ring-4 ring-[#004eff]/20"
+                              ? "bg-[#3878F6] text-white ring-4 ring-[#3878F6]/20"
                               : "bg-gray-200 text-gray-500"
                         }`}
                       >
@@ -187,7 +187,7 @@ export const CompanyFormation: React.FC = () => {
                       <span
                         className={`text-xs mt-2 font-medium whitespace-nowrap ${
                           currentStep === step.number
-                            ? "text-[#004eff]"
+                            ? "text-[#3878F6]"
                             : currentStep > step.number
                               ? "text-green-600"
                               : "text-gray-500"
@@ -221,7 +221,7 @@ export const CompanyFormation: React.FC = () => {
                           currentStep > step.number
                             ? "bg-green-500 text-white"
                             : currentStep === step.number
-                              ? "bg-[#004eff] text-white ring-4 ring-[#004eff]/20"
+                              ? "bg-[#3878F6] text-white ring-4 ring-[#3878F6]/20"
                               : "bg-gray-200 text-gray-500"
                         }`}
                       >
@@ -234,7 +234,7 @@ export const CompanyFormation: React.FC = () => {
                       <span
                         className={`text-xs mt-2 font-medium whitespace-nowrap ${
                           currentStep === step.number
-                            ? "text-[#004eff]"
+                            ? "text-[#3878F6]"
                             : currentStep > step.number
                               ? "text-green-600"
                               : "text-gray-500"
@@ -278,7 +278,7 @@ export const CompanyFormation: React.FC = () => {
             onClick={prevStep}
             disabled={currentStep === 1 || isLoading}
             variant="outline"
-            className="h-12 px-6 rounded-full border-2 border-gray-300 hover:border-[#004eff] hover:bg-[#004eff] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="h-12 px-6 rounded-full border-2 border-gray-300 hover:border-[#3878F6] hover:bg-[#3878F6] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back
@@ -288,7 +288,7 @@ export const CompanyFormation: React.FC = () => {
             <Button
               onClick={handleNext}
               disabled={isValidatingEmail}
-              className="h-12 px-8 rounded-full bg-gradient-to-r from-[#6896ff] to-[#004eff] hover:opacity-90 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              className="h-12 px-8 rounded-full bg-gradient-to-r from-[#2E5FD8] to-[#3878F6] hover:opacity-90 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isValidatingEmail ? (
                 <Loader2 className="w-5 h-5 mr-2 animate-spin" />

@@ -35,7 +35,7 @@ export const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
           className={cn(
             "h-5 w-5 shrink-0 rounded border-2 flex items-center justify-center transition-all duration-200",
             checked
-              ? "bg-[#004eff] border-[#004eff]"
+              ? "bg-[#3878F6] border-[#3878F6]"
               : "bg-white border-gray-300 group-hover:border-gray-400"
           )}
         >

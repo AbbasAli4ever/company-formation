@@ -65,7 +65,7 @@ export const Step8Review: React.FC = () => {
   const directors = useDirectors();
   const errors = stepErrors;
 
-  const { applicant, company, shareCapital, complianceAccepted } = formData;
+  const { applicant, company, /* shareCapital, */ complianceAccepted } = formData;
 
   const getCountryName = () =>
     getCountryLabel(company.countryOfIncorporation);
@@ -85,11 +85,11 @@ export const Step8Review: React.FC = () => {
     shareholders.length > 0 &&
     shareholders.every((s) => s.fullName && s.email);
 
-  const isStep3Complete =
-    shareholders.length > 0 &&
-    shareCapital.totalAmount > 0 &&
-    shareCapital.totalShares > 0 &&
-    shareholders.reduce((sum, s) => sum + (s.shareholding?.percentage || 0), 0) === 100;
+  // const isStep3Complete =
+  //   shareholders.length > 0 &&
+  //   shareCapital.totalAmount > 0 &&
+  //   shareCapital.totalShares > 0 &&
+  //   shareholders.reduce((sum, s) => sum + (s.shareholding?.percentage || 0), 0) === 100;
 
   const isStep4Complete =
     directors.length > 0 &&
@@ -98,14 +98,14 @@ export const Step8Review: React.FC = () => {
   const incompleteSections = [
     ...(!isStep1Complete ? ["Company Information"] : []),
     ...(!isStep2Complete ? ["Shareholders"] : []),
-    ...(!isStep3Complete ? ["Share Capital"] : []),
+    // ...(!isStep3Complete ? ["Share Capital"] : []),
     ...(!isStep4Complete ? ["Directors"] : []),
   ];
 
-  const totalAllocated = shareholders.reduce(
-    (sum, s) => sum + (s.shareholding?.percentage || 0),
-    0,
-  );
+  // const totalAllocated = shareholders.reduce(
+  //   (sum, s) => sum + (s.shareholding?.percentage || 0),
+  //   0,
+  // );
 
   return (
     <div className="space-y-6">
@@ -145,10 +145,12 @@ export const Step8Review: React.FC = () => {
           <p className="text-xs text-gray-600">Directors</p>
           <p className="text-lg font-semibold text-[#212833]">{directors.length}</p>
         </div>
+        {/* Share Allocation stat — disabled for now, re-enable when needed
         <div className="p-4 bg-[#f8fbff] rounded-xl border border-[#dbe6ff]">
           <p className="text-xs text-gray-600">Share Allocation</p>
           <p className="text-lg font-semibold text-[#212833]">{totalAllocated.toFixed(2)}%</p>
         </div>
+        */}
         <div className="p-4 bg-[#f8fbff] rounded-xl border border-[#dbe6ff]">
           <p className="text-xs text-gray-600">Compliance Consent</p>
           <p className="text-lg font-semibold text-[#212833]">
@@ -236,12 +238,10 @@ export const Step8Review: React.FC = () => {
         </div>
       </div>
 
-      {/* Share Capital & Distribution */}
+      {/* Share Capital summary — disabled for now, re-enable when needed
       <div className="p-3 md:p-6 bg-white rounded-xl border border-gray-200">
-        <h4 className="text-base font-semibold text-[#212833] mb-4">
-          Share Capital & Distribution
-        </h4>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm mb-5">
+        <h4 className="text-base font-semibold text-[#212833] mb-4">Share Capital</h4>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
           <div>
             <p className="text-xs text-gray-600 mb-1">Capital Amount</p>
             <p className="font-medium text-[#212833]">
@@ -259,7 +259,12 @@ export const Step8Review: React.FC = () => {
             <p className="font-medium text-[#212833]">{totalAllocated.toFixed(2)}%</p>
           </div>
         </div>
+      </div>
+      */}
 
+      {/* Shareholders */}
+      <div className="p-3 md:p-6 bg-white rounded-xl border border-gray-200">
+        <h4 className="text-base font-semibold text-[#212833] mb-4">Shareholders</h4>
         <div className="space-y-3">
           {shareholders.length === 0 ? (
             <p className="text-sm text-gray-600">No shareholders added.</p>
@@ -286,17 +291,19 @@ export const Step8Review: React.FC = () => {
                     </p>
                   </div>
                   <div>
+                    <p className="text-xs text-gray-600 mb-1">Ownership</p>
+                    <p className="font-medium text-[#212833]">
+                      {(shareholder.shareholding?.percentage || 0)}%
+                    </p>
+                  </div>
+                  {/* Shares count — disabled for now, re-enable when needed
+                  <div>
                     <p className="text-xs text-gray-600 mb-1">Shares</p>
                     <p className="font-medium text-[#212833]">
                       {Number(shareholder.shareholding?.shares || 0).toLocaleString()}
                     </p>
                   </div>
-                  <div>
-                    <p className="text-xs text-gray-600 mb-1">Ownership</p>
-                    <p className="font-medium text-[#212833]">
-                      {(shareholder.shareholding?.percentage || 0).toFixed(2)}%
-                    </p>
-                  </div>
+                  */}
                   <div>
                     <p className="text-xs text-gray-600 mb-1">Email</p>
                     <p className="font-medium text-[#212833]">{shareholder.email || "Not provided"}</p>

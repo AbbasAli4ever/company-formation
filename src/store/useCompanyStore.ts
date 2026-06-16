@@ -1002,9 +1002,9 @@ export const useCompanyStore = create<CompanyStoreState>()(
             businessScope: formData.company.businessScope,
             businessScopeDescription: formData.company.businessScopeDescription,
           },
-          shareCapital: formData.shareCapital,
+          // shareCapital: formData.shareCapital, // disabled for now, re-enable when needed
           persons: formData.persons.map((p) => {
-            const isShareholder = p.roles.includes("shareholder");
+            // const isShareholder = p.roles.includes("shareholder"); // disabled for now
             if (p.type === "individual") {
               return {
                 type: p.type,
@@ -1020,7 +1020,7 @@ export const useCompanyStore = create<CompanyStoreState>()(
                 companyName: null,
                 countryOfIncorporation: null,
                 registrationNumber: null,
-                shareholding: isShareholder ? p.shareholding : null,
+                // shareholding: isShareholder ? p.shareholding : null, // disabled for now
                 documents: p.documents,
               };
             }
@@ -1036,13 +1036,13 @@ export const useCompanyStore = create<CompanyStoreState>()(
               companyName: p.companyName,
               countryOfIncorporation: countryIso(p.countryOfIncorporation ?? ""),
               registrationNumber: p.registrationNumber,
-              shareholding: isShareholder ? p.shareholding : null,
+              // shareholding: isShareholder ? p.shareholding : null, // disabled for now
               documents: p.documents,
             };
           }),
           complianceAccepted: formData.complianceAccepted,
-          signupUrl: "https://dashboard.mutetaxes.com/signup",
-          loginUrl: "https://dashboard.mutetaxes.com/signin",
+          signupUrl: "https://app.swiftnine.com/signup",
+          loginUrl: "https://app.swiftnine.com/signin",
         };
 
         console.log("Submission payload:", JSON.stringify(payload, null, 2));
